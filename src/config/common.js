@@ -160,7 +160,7 @@ export function getCSSRules(env, { config, paths, cssLoaders, theme }) {
       include: includeTest.bind(null, paths.appNodeModules),
       use: [
         'style',
-        ...cssLoaders.nodeModules,
+        ...cssLoaders.own,
       ],
     },
     {
@@ -168,7 +168,7 @@ export function getCSSRules(env, { config, paths, cssLoaders, theme }) {
       include: includeTest.bind(null, paths.appNodeModules),
       use: [
         'style',
-        ...cssLoaders.nodeModules,
+        ...cssLoaders.own,
         {
           loader: 'less',
           options: {
