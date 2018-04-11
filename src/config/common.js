@@ -160,7 +160,7 @@ export function getCSSRules(env, { config, paths, cssLoaders, theme }) {
       include: includeTest.bind(null, paths.appNodeModules),
       use: [
         'style',
-        ...cssLoaders.own,
+        ...cssLoaders.nodeModules,
       ],
     },
     {
@@ -168,7 +168,7 @@ export function getCSSRules(env, { config, paths, cssLoaders, theme }) {
       include: includeTest.bind(null, paths.appNodeModules),
       use: [
         'style',
-        ...cssLoaders.own,
+        ...cssLoaders.nodeModules,
         {
           loader: 'less',
           options: {
@@ -178,6 +178,36 @@ export function getCSSRules(env, { config, paths, cssLoaders, theme }) {
       ],
     },
   ];
+  if (config.cssModulesInclude && config.cssModulesInclude.length) {
+    const include = config.cssModulesInclude.map((item) => {
+      return join(paths.appDirectory, item);
+    });
+    rules = [
+      ...rules,
+      {
+        test: /\.css$/,
+        include,
+        use: [
+          'style',
+          ...cssLoaders.own,
+        ],
+      },
+      {
+        test: /\.less$/,
+        include,
+        use: [
+          'style',
+          ...cssLoaders.own,
+          {
+            loader: 'less',
+            options: {
+              modifyVars: theme,
+            },
+          },
+        ],
+      },
+    ];
+  }
   if (config.cssModulesExclude && config.cssModulesExclude.length) {
     const include = config.cssModulesExclude.map((item) => {
       return join(paths.appDirectory, item);
